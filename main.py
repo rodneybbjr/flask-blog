@@ -9,11 +9,12 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
+import os
 
 app = Flask(__name__)
 app.config.update(
-    SECRET_KEY="8BYkEfBA6O6donzWlSihBXox7C0sKR6b",
-    SQLALCHEMY_DATABASE_URI='sqlite:///blog.db',
+    SECRET_KEY=os.getenv("SECRET_KEY"),
+    SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URL"),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
 )
 ckeditor = CKEditor(app)
