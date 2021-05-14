@@ -9,11 +9,10 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
-import os
 
 app = Flask(__name__)
 app.config.update(
-    SECRET_KEY=os.environ["MY_SECRET_KEY"],
+    SECRET_KEY="8BYkEfBA6O6donzWlSihBXox7C0sKR6b",
     SQLALCHEMY_DATABASE_URI='sqlite:///blog.db',
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
 )
@@ -144,6 +143,7 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('get_all_posts'))
@@ -182,6 +182,7 @@ def contact():
 
 @app.route("/new-post", methods=["GET", "POST"])
 @admin_only
+@login_required
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
@@ -202,6 +203,7 @@ def add_new_post():
 
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 @admin_only
+@login_required
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
@@ -224,6 +226,7 @@ def edit_post(post_id):
 
 @app.route("/delete/<int:post_id>")
 @admin_only
+@login_required
 def delete_post(post_id):
     post_to_delete = BlogPost.query.get(post_id)
     db.session.delete(post_to_delete)
